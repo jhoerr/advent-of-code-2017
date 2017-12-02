@@ -36,13 +36,13 @@ let sumRowsBy f s =
 
 // ---- PART 1 ----
 // find the difference between the max and min cells in the row
-let differenceOfMaxAndMinCells row =
+let differenceOfMaxAndMinPair row =
     let max = row |> List.max
     let min = row |> List.min
     max-min
 
 // convert the string to a grid and sum the differences of max/min cells
-let part1 s = s |> sumRowsBy differenceOfMaxAndMinCells
+let part1 = sumRowsBy differenceOfMaxAndMinPair
 
 // test
 """5 1 9 5
@@ -52,19 +52,18 @@ let part1 s = s |> sumRowsBy differenceOfMaxAndMinCells
 spreadsheet |> part1
 
 // ---- PART 2 ----
-// find the pair of evenly divisible cells in each row
-let evenlyDivisibleCells row =
-    let evenlyDivisibleCell (i,j) = 
-        i>j && i%j=0
-    let pairWithEveryCell i =
-        row |> List.map (fun j -> (i,j))
+// find the quotient of the evenly divisible pair in each row
+let quotientOfEvenlyDivisiblePair row =
+    let cartesianPairs i = row |> List.map (fun j -> (i,j))
+    let evenlyDivisiblePair (i,j) = i>j && i%j=0
+    let divide (i,j) = i/j
     row
-    |> List.collect pairWithEveryCell
-    |> List.find evenlyDivisibleCell
-    |> (fun (i,j) -> i/j)
+    |> List.collect cartesianPairs
+    |> List.find evenlyDivisiblePair
+    |> divide
 
 // convert the string to a grid and sum of quotients of evenly divisible cells
-let part2 s = s |> sumRowsBy evenlyDivisibleCells
+let part2 = sumRowsBy quotientOfEvenlyDivisiblePair
 
 // test
 """5 9 2 8
